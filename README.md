@@ -1,6 +1,6 @@
-## Gatling Corp React project
+## Minautor React project
 
-The goal of this small project is to create a small webapp displaying users and their related posts (data are located on [jsonplaceholder](https://jsonplaceholder.typicode.com)). 
+The goal of this small project is to create a small webapp displaying users and their related posts (data are located on [jsonplaceholder](https://jsonplaceholder.typicode.com)).
 
 Use this project, which has already yarn configured and the table of users implemented. The architecture of the project is up to you. Please code as you would do in your everyday work.
 
