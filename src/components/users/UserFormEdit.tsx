@@ -1,4 +1,5 @@
-import type { User } from '@views/UsersContainer';
+import { useAppDispatch } from '@app/hooks';
+import { editUser } from '@slices/usersSlice';
 import { FormEventHandler, useState } from 'react';
 
 interface UserForm extends User, Record<string, any> {}
@@ -9,26 +10,35 @@ type UserFormEditProps = {
 };
 
 const UserFormEdit = ({ user, onCancel }: UserFormEditProps) => {
-  user.firstname = user.name.split(' ')[0];
-  user.lastname = user.name.split(' ')[1];
+  const userForm = { ...user };
+  userForm.firstname = user.name.split(' ')[0];
+  userForm.lastname = user.name.split(' ')[1];
 
-  const [form, setForm] = useState<UserForm>(user);
+  const [form, setForm] = useState<UserForm>(userForm);
 
-  const onSubmit = (e: any): void => {
+  const dispatch = useAppDispatch();
+
+  const onSubmit = async (e: any): Promise<void> => {
     e.preventDefault();
-    form.name = `${form.firstname} ${form.lastname}`;
-    const { firstname, lastname, ...newForm } = form;
-    fetch(`https://jsonplaceholder.typicode.com/users/${user.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...newForm,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+    const { firstname, lastname, ...editingUser } = form;
+    editingUser.name = `${firstname} ${lastname}`;
+    try {
+      const editedUser = await fetch(
+        `https://jsonplaceholder.typicode.com/users/${user.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            ...editingUser,
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        }
+      ).then((response) => response.json());
+      dispatch(editUser(editedUser));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

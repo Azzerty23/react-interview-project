@@ -1,39 +1,39 @@
-import type { FunctionComponent } from 'react';
-import fetcher from '@helpers/fetcher';
-import useSWRImmutable from 'swr/immutable';
+import { FunctionComponent, useEffect } from 'react';
 import PostsFeed from '@components/posts/PostsFeed';
 import Spinner from '@components/ui/Spinner';
-import type { User } from './UsersContainer';
-
-export type Post = {
-  id: number;
-  userId: number;
-  title: string;
-  body: string;
-};
+import { fetchPosts, selectPosts } from '@slices/postsSlice';
+import { useAppDispatch, useAppSelector } from '@app/hooks';
+import { fetchUsers, selectUsers } from '@slices/usersSlice';
+import { FetchStatus } from '@data/enum';
 
 const PostsContainer: FunctionComponent = () => {
-  const { data: posts, error } = useSWRImmutable<Post[]>(
-    'https://jsonplaceholder.typicode.com/posts/',
-    fetcher
-  );
+  const posts = useAppSelector(selectPosts);
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
 
-  const { data: users, error: usersError } = useSWRImmutable<User[]>(
-    'https://jsonplaceholder.typicode.com/users/',
-    fetcher
-  );
+  useEffect(() => {
+    if (posts.status === FetchStatus.idle) dispatch(fetchPosts());
+  }, [dispatch, posts]);
 
-  if (error || usersError) return <div>An error has occurred.</div>;
-  if (!posts || !users)
+  useEffect(() => {
+    if (users.status === FetchStatus.idle) dispatch(fetchUsers());
+  }, [dispatch, users]);
+
+  if (posts.error || users.error) return <div>An error has occurred.</div>;
+  if (
+    posts.status === FetchStatus.loading ||
+    users.status === FetchStatus.loading
+  ) {
     return (
       <div className="absolute inset-0 flex items-center justify-center">
         <Spinner />
       </div>
     );
+  }
 
   return (
     <div className="mx-auto mt-8 max-w-3xl">
-      <PostsFeed posts={posts} users={users} />
+      <PostsFeed posts={posts.value} users={users.value} />
     </div>
   );
 };

@@ -1,17 +1,24 @@
-import { FunctionComponent /* useEffect, useState */ } from 'react';
-// import axios from 'axios';
-// import type { User } from '@views/UsersContainer';
-import Overview from '@components/Overview';
+import { FunctionComponent, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@app/hooks';
+import { fetchPosts, selectPosts } from '@slices/postsSlice';
+import { fetchUsers, selectUsers } from '@slices/usersSlice';
+import Overview from '@components/overview/Overview';
+import { FetchStatus } from '@data/enum';
 
 const HomeContainer: FunctionComponent = () => {
-  // const [users, setUsers] = useState<User[]>([]);
+  const posts = useAppSelector(selectPosts);
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const url = 'https://jsonplaceholder.typicode.com/users';
-  //   axios.get(url).then((response) => setUsers(response.data));
-  // }, []);
+  useEffect(() => {
+    if (posts.status === FetchStatus.idle) dispatch(fetchPosts());
+  }, [dispatch, posts]);
 
-  return <Overview />;
+  useEffect(() => {
+    if (users.status === FetchStatus.idle) dispatch(fetchUsers());
+  }, [dispatch, users]);
+
+  return <Overview users={users.value} posts={posts.value} />;
 };
 
 export default HomeContainer;
