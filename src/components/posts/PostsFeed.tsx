@@ -1,7 +1,5 @@
 import PostsList from './PostList';
 import PostsTabs from './PostsTabs';
-import type { Post } from '@views/PostsContainer';
-import type { User } from '@views/UsersContainer';
 
 type PostsFeedProps = {
   posts: Post[];

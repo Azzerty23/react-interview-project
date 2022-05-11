@@ -1,24 +1,31 @@
 import { useAppDispatch } from '@app/hooks';
 import { editUser } from '@slices/usersSlice';
-import { FormEventHandler, useState } from 'react';
+import { useState } from 'react';
 
-interface UserForm extends User, Record<string, any> {}
+type Username = {
+  firstname: string;
+  lastname: string;
+};
+
+type UserForm = User & Username;
 
 type UserFormEditProps = {
-  user: UserForm;
-  onCancel: Function;
+  user: User;
+  onCancel: () => void;
 };
 
 const UserFormEdit = ({ user, onCancel }: UserFormEditProps) => {
-  const userForm = { ...user };
-  userForm.firstname = user.name.split(' ')[0];
-  userForm.lastname = user.name.split(' ')[1];
+  const firstname = user.name.split(' ')[0];
+  const lastname = user.name.split(' ')[1];
+  const userForm: UserForm = { ...user, firstname, lastname };
 
   const [form, setForm] = useState<UserForm>(userForm);
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = async (e: any): Promise<void> => {
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     const { firstname, lastname, ...editingUser } = form;
     editingUser.name = `${firstname} ${lastname}`;
@@ -43,7 +50,7 @@ const UserFormEdit = ({ user, onCancel }: UserFormEditProps) => {
 
   return (
     <form
-      onSubmit={onSubmit as FormEventHandler<HTMLFormElement>}
+      onSubmit={onSubmit}
       className="space-t-6 sm:space-t-5 flex h-full flex-col pt-8 sm:pt-6"
     >
       <div className="h-full overflow-y-auto">

@@ -1,26 +1,22 @@
-import type { User } from '@views/UsersContainer';
+import clsx from 'clsx';
 import { Link, useSearchParams } from 'react-router-dom';
+import isUserInResidenceType, {
+  ResidenceTypeFilter,
+} from '@helpers/isUserInResidenceType';
 
 type TableProps = {
   users: User[];
 };
 
-const residenceMapping = {
-  all: '',
-  apartment: 'Apt',
-  suite: 'Suite',
-} as any;
-
-const isUserInResidenceType = (user: User, type: string = '') =>
-  user.address.suite?.startsWith(type);
+type ResidenceType = keyof typeof ResidenceTypeFilter;
 
 const UsersTable = ({ users }: TableProps) => {
   const [searchParams] = useSearchParams();
 
-  const residence = searchParams.get('residence') || '';
-  const residenceType = residenceMapping[residence];
+  const residenceType = searchParams.get('residence') as ResidenceType;
+  const residenceTypeFilter = ResidenceTypeFilter[residenceType];
   const filteredUsers = users.filter((user) =>
-    isUserInResidenceType(user, residenceType)
+    isUserInResidenceType(user, residenceTypeFilter)
   );
 
   return (
@@ -89,15 +85,19 @@ const UsersTable = ({ users }: TableProps) => {
                         <div className="text-gray-500">{user.company.bs}</div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {isUserInResidenceType(user, 'Apt') ? (
-                          <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">
-                            {user.address.suite}
-                          </span>
-                        ) : (
-                          <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                            {user.address.suite}
-                          </span>
-                        )}
+                        <span
+                          className={clsx(
+                            'inline-flex rounded-full px-2 text-xs font-semibold leading-5',
+                            isUserInResidenceType(
+                              user,
+                              ResidenceTypeFilter.apartment
+                            )
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-green-100 text-green-800'
+                          )}
+                        >
+                          {user.address.suite}
+                        </span>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {user.phone}

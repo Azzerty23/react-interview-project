@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@app/hooks';
 import { fetchUsers, selectUsers } from '@slices/usersSlice';
 import { FetchStatus } from '@data/enum';
 
-const UsersContainer: FunctionComponent = ({}) => {
+const UsersContainer: FunctionComponent = () => {
   const users = useAppSelector(selectUsers);
   const dispatch = useAppDispatch();
 

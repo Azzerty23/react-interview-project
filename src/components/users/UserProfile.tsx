@@ -1,5 +1,4 @@
 import { MailIcon, PhoneIcon, UserCircleIcon } from '@heroicons/react/solid';
-import type { User } from '@views/UsersContainer';
 
 type UserProfileProps = {
   user: User;

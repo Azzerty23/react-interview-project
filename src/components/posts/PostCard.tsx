@@ -13,8 +13,6 @@ import {
 import clsx from 'clsx';
 import getRamdomDate from '@helpers/getRandomDate';
 import capitalizeFirstLetter from '@helpers/capitalizeFirstLetter';
-import type { User } from '@views/UsersContainer';
-import type { Post } from '@views/PostsContainer';
 
 type PostProps = {
   post: Post;

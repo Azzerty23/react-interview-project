@@ -1,7 +1,5 @@
-import PostCard from '@components/posts/PostCard';
-import type { Post } from '@views/PostsContainer';
-import type { User } from '@views/UsersContainer';
 import { useMemo } from 'react';
+import PostCard from '@components/posts/PostCard';
 
 type PostsUserListProps = {
   posts: Post[];
@@ -14,7 +12,7 @@ const PostsUserList = ({ posts, user }: PostsUserListProps) => {
     [posts, user]
   );
   return (
-    <ul role="list" className="space-y-4">
+    <ul className="space-y-4">
       {userPosts.map((post) => {
         return <PostCard key={post.id} post={post} author={user} />;
       })}

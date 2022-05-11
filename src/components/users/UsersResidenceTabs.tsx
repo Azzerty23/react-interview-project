@@ -19,11 +19,12 @@ const UsersResidenceTabs = () => {
   const [current, setCurrent] = useState<number>(TabResidence.all);
   const [searchParams] = useSearchParams();
 
-  const residence = searchParams.get('residence');
+  const residence = searchParams.get('residence') || '';
 
   useEffect(() => {
-    if (residence) {
-      const currentTab = Object.values(TabResidence).indexOf(residence);
+    const currentTab = Object.values(TabResidence).indexOf(residence);
+    // if currentTab in tabs
+    if (currentTab !== -1) {
       setCurrent(currentTab);
     }
   }, [residence]);
