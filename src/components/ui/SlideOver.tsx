@@ -1,7 +1,6 @@
-import { Dispatch, Fragment, ReactNode, SetStateAction, useState } from 'react';
+import { Dispatch, Fragment, ReactNode, SetStateAction } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
-import UserFormEdit from '@components/users/UserFormEdit';
 
 type SlideOverProps = {
   title: string;

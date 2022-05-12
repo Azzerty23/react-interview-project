@@ -3,12 +3,6 @@ import axios from 'axios';
 import { RootState } from '@app/store';
 import { FetchStatus } from '@data/enum';
 
-interface UsersState {
-  value: User[];
-  status: FetchStatus;
-  error: string | null;
-}
-
 const initialState: UsersState = {
   value: [],
   status: FetchStatus.idle,
@@ -22,9 +16,9 @@ const initialState: UsersState = {
 // typically used to make async requests.
 export const fetchUsers = createAsyncThunk<User[]>(
   'users/fetchUsers',
-  async (dispatch, getState) => {
+  async (dispatch, getState): Promise<User[]> => {
     const url = 'https://jsonplaceholder.typicode.com/users/';
-    const response = await axios.get(url);
+    const response = await axios.get<User[]>(url);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }

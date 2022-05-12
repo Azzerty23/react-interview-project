@@ -21,3 +21,9 @@ type User = {
   };
   website: string;
 };
+
+type UsersState = {
+  value: User[];
+  status: FetchStatus;
+  error: string | null;
+};
