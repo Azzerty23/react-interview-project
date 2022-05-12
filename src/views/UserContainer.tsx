@@ -1,21 +1,17 @@
 import { FunctionComponent, useEffect, useState } from 'react';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Heading from '@components/ui/Heading';
 import UserProfile from '@components/users/UserProfile';
 import Spinner from '@components/ui/Spinner';
 import PostsUserList from '@components/posts/PostsUserList';
 import SlideOver from '@components/ui/SlideOver';
 import UserFormEdit from '@components/users/UserFormEdit';
-import { useAppDispatch, useAppSelector } from '@app/hooks';
-import { fetchUsers, selectUsers } from '@slices/usersSlice';
-import { fetchPosts, selectPosts } from '@slices/postsSlice';
-import { FetchStatus } from '@data/enum';
+import useFetchPosts from '@hooks/useFetchPosts';
+import useGetUserFromParams from '@hooks/useGetUserFromParams';
 
 const UserContainer: FunctionComponent = () => {
   const [slideOverOpen, setSlideOverOpen] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User>();
 
-  const { userId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const edit = searchParams.get('edit');
 
@@ -26,19 +22,8 @@ const UserContainer: FunctionComponent = () => {
     setSearchParams({ edit: 'false' }, { replace: true });
   };
 
-  const users = useAppSelector(selectUsers);
-  const posts = useAppSelector(selectPosts);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (users.status === FetchStatus.idle) dispatch(fetchUsers());
-    const user = users.value.find(({ id }) => id.toString() === userId);
-    setCurrentUser(user);
-  }, [dispatch, users, userId]);
-
-  useEffect(() => {
-    if (posts.status === FetchStatus.idle) dispatch(fetchPosts());
-  }, [dispatch, posts]);
+  const posts = useFetchPosts();
+  const currentUser = useGetUserFromParams();
 
   useEffect(() => {
     if (edit === 'true') {
@@ -48,7 +33,7 @@ const UserContainer: FunctionComponent = () => {
     }
   }, [edit]);
 
-  if (users.error || posts.error) return <div>An error has occurred.</div>;
+  if (posts.error) return <div>An error has occurred.</div>;
   if (!currentUser || !posts)
     return (
       <div className="absolute inset-0 flex items-center justify-center">

@@ -9,6 +9,7 @@ module.exports = {
       '@app': path.resolve(__dirname, 'src/app'),
       '@slices': path.resolve(__dirname, 'src/slices'),
       '@data': path.resolve(__dirname, 'src/data'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
     },
   },
 };

@@ -1,19 +1,13 @@
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent } from 'react';
 import Heading from '@components/ui/Heading';
 import UsersTable from '@components/users/UsersTable';
 import Spinner from '@components/ui/Spinner';
 import UsersResidenceTabs from '@components/users/UsersResidenceTabs';
-import { useAppDispatch, useAppSelector } from '@app/hooks';
-import { fetchUsers, selectUsers } from '@slices/usersSlice';
 import { FetchStatus } from '@data/enum';
+import useFetchUsers from '@hooks/useFetchUsers';
 
 const UsersContainer: FunctionComponent = () => {
-  const users = useAppSelector(selectUsers);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (users.status === FetchStatus.idle) dispatch(fetchUsers());
-  }, [dispatch, users.status]);
+  const users = useFetchUsers();
 
   if (users.error) return <div>An error has occurred.</div>;
   if (users.status === FetchStatus.loading)
