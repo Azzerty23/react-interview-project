@@ -11,8 +11,6 @@ import {
   ThumbUpIcon,
 } from '@heroicons/react/solid';
 import clsx from 'clsx';
-import getRamdomDate from '@helpers/getRandomDate';
-import capitalizeFirstLetter from '@helpers/capitalizeFirstLetter';
 
 type PostProps = {
   post: Post;
@@ -34,14 +32,7 @@ const PostCard = ({ post, author }: PostProps) => {
                   {author?.name}
                 </Link>
               </p>
-              <p className="text-sm text-gray-500">
-                {getRamdomDate('2003-01-01').toLocaleDateString('en-us', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </p>
+              <p className="text-sm text-gray-500">{post.date}</p>
             </div>
             <div className="flex flex-shrink-0 self-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -117,12 +108,10 @@ const PostCard = ({ post, author }: PostProps) => {
             id={'post-title-' + post.id}
             className="mt-4 text-base font-medium text-gray-900"
           >
-            {capitalizeFirstLetter(post.title)}
+            {post.title}
           </h2>
         </div>
-        <div className="mt-2 space-y-4 text-sm text-gray-700">
-          {capitalizeFirstLetter(post.body)}
-        </div>
+        <div className="mt-2 space-y-4 text-sm text-gray-700">{post.body}</div>
         <div className="mt-6 flex justify-between space-x-8">
           <div className="flex space-x-6">
             <span className="inline-flex items-center text-sm">
@@ -131,10 +120,7 @@ const PostCard = ({ post, author }: PostProps) => {
                 className="inline-flex space-x-2 text-gray-400 hover:text-gray-500"
               >
                 <ThumbUpIcon className="h-5 w-5" aria-hidden="true" />
-                <span className="font-medium text-gray-900">
-                  {/* likes */}
-                  {Math.floor(Math.random() * 1000)}
-                </span>
+                <span className="font-medium text-gray-900">{post.likes}</span>
                 <span className="sr-only">likes</span>
               </button>
             </span>
@@ -145,8 +131,7 @@ const PostCard = ({ post, author }: PostProps) => {
               >
                 <ChatAltIcon className="h-5 w-5" aria-hidden="true" />
                 <span className="font-medium text-gray-900">
-                  {/* replies */}
-                  {Math.floor(Math.random() * 100)}
+                  {post.replies}
                 </span>
                 <span className="sr-only">replies</span>
               </button>
@@ -157,10 +142,7 @@ const PostCard = ({ post, author }: PostProps) => {
                 className="inline-flex space-x-2 text-gray-400 hover:text-gray-500"
               >
                 <EyeIcon className="h-5 w-5" aria-hidden="true" />
-                <span className="font-medium text-gray-900">
-                  {/* views */}
-                  {Math.floor(Math.random() * 10000)}
-                </span>
+                <span className="font-medium text-gray-900">{post.views}</span>
                 <span className="sr-only">views</span>
               </button>
             </span>
