@@ -31,7 +31,10 @@ export const fetchPosts = createAsyncThunk<Post[]>(
       replies: Math.floor(Math.random() * 100),
       views: Math.floor(Math.random() * 10000),
     }));
-    return enhancedPosts;
+    const sortedPosts = enhancedPosts.sort(
+      (a, b) => (new Date(b.date) as any) - (new Date(a.date) as any)
+    );
+    return sortedPosts;
   }
 );
 

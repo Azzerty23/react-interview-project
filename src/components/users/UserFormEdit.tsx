@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { useAppDispatch } from '@app/hooks';
 import { editUser } from '@slices/usersSlice';
-import { useState } from 'react';
 
 type Username = {
   firstname: string;
